@@ -1,0 +1,1 @@
+Ruby on Rails is an open source web framework. Like the Ruby language, it emphasizes programmer happiness and productivity. as you'll see, it includes sensible defaults that allow you to spend less tim edealing with confiuration and more time writing code. It also creates a directory structure for your application with a place for every file you need.
