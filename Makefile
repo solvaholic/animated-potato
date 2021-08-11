@@ -17,12 +17,19 @@ PUSER = $(if ${_U},--user ${_U},)
 default: lint
 
 lint: lint-super-linter
-build: lint-dockerfile-lint docker-build
+build: lint-dockerfile docker-build
 shell: container-shell
 
-lint-dockerfile-lint:
-	# TODO: Use linter in super-linter
-	@echo "Container image policies skipped!"
+lint-dockerfile:
+	@echo "Linting Dockerfile..."
+	@docker run --rm --pull always \
+		-e IGNORE_GITIGNORED_FILES=true \
+		-e VALIDATE_ENV=false \
+		-e RUN_LOCAL=true \
+		--entrypoint /usr/bin/hadolint \
+		--volume "$(realpath ${SRCDIR})":"/tmp/lint":ro \
+		${LINTER_TAG} /tmp/lint/Dockerfile
+	@echo "Dockerfile linted!"
 
 lint-super-linter:
 	@echo "Linting all the things..."
