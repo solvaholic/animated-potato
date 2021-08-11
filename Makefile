@@ -6,6 +6,7 @@ NAME = railsbox
 IMAGE ?= solvaholic/${NAME}
 IMAGE_VER ?= local
 IMAGE_TAG ?= ${IMAGE}:${IMAGE_VER}
+LINTER_TAG ?= github/super-linter
 
 # Set $_U to override the image's default user, for example:
 # 	make container-shell _U=root
@@ -25,18 +26,19 @@ lint-dockerfile-lint:
 
 lint-super-linter:
 	@echo "Linting all the things..."
-	@docker run --rm \
+	@docker run --rm --pull always \
+		-e IGNORE_GITIGNORED_FILES=true \
 		-e VALIDATE_ENV=false \
 		-e RUN_LOCAL=true \
-		-v "$(realpath ${SRCDIR})":"/tmp/lint":ro \
-		github/super-linter
+		--volume "$(realpath ${SRCDIR})":"/tmp/lint":ro \
+		${LINTER_TAG}
 	@echo "All the things linted!"
 
 docker-build:
 	@echo "Building ${IMAGE_TAG} image..."
 	@docker build \
 		--build-arg image_version="${IMAGE_VER}" \
-		-t ${IMAGE_TAG} ${SRCDIR}
+		--tag ${IMAGE_TAG} ${SRCDIR}
 	@echo "${IMAGE_TAG} image built!"
 	@docker images ${IMAGE_TAG}
 

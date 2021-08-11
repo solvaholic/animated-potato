@@ -44,8 +44,8 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 # Add a non-root user account and create /code
-RUN useradd -c "" -m -p "" -s /bin/bash user1
-RUN mkdir -p /code && \
+RUN useradd -c "" -m -p "" -s /bin/bash user1 && \
+    mkdir -p /code && \
     chown user1 /code
 USER user1
 
