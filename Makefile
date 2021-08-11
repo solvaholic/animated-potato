@@ -54,7 +54,7 @@ container-shell:
 	@docker start ${NAME} 2>/dev/null || \
 		docker run --tty --detach ${PNAME} ${PUSER} \
 			--volume "$(realpath ${SRCDIR})":/code:rw \
-			--expose 3000:3000 \
+			--publish 3000:3000 \
 			${IMAGE_TAG}
 	@docker exec --tty --interactive ${PUSER} ${NAME} ${SHELL}
 	@echo "Interactive ${NAME} shell finished!"
