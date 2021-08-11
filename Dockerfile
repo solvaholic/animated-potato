@@ -64,3 +64,4 @@ RUN set -o pipefail && \
 
 WORKDIR /code
 VOLUME /code
+EXPOSE 3000/tcp

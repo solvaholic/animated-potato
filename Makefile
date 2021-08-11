@@ -42,10 +42,12 @@ docker-build:
 
 container-shell:
 	@echo "Running interactive ${NAME} shell..."
-	@docker exec -it ${PUSER} ${NAME} ${SHELL} 2>/dev/null || \
-		docker run -it --rm ${PNAME} ${PUSER} \
-			-v "$(realpath ${SRCDIR})":/code:rw \
+	@docker start ${NAME} 2>/dev/null || \
+		docker run --tty --detach ${PNAME} ${PUSER} \
+			--volume "$(realpath ${SRCDIR})":/code:rw \
+			--expose 3000:3000 \
 			${IMAGE_TAG}
+	@docker exec --tty --interactive ${PUSER} ${NAME} ${SHELL}
 	@echo "Interactive ${NAME} shell finished!"
 
 inspect-labels:
