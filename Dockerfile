@@ -23,7 +23,7 @@ RUN cp /usr/share/i18n/charmaps/UTF-8.gz /tmp && \
     /usr/lib/locale/en_US.UTF-8
 
 # Build railsbox image
-FROM ruby:2-buster AS railsbox
+FROM ruby:3-buster AS railsbox
 ARG image_version
 
 LABEL name="solvaholic/railsbox" \
@@ -50,12 +50,14 @@ RUN useradd -c "" -m -p "" -s /bin/bash user1 && \
 USER user1
 
 # Install prerequisites
-RUN mkdir -p "${HOME}/.local/bin"
 # hadolint ignore=DL3028,DL3016,DL4006
-RUN set -o pipefail && \
+RUN mkdir -p "${HOME}/.local/bin" && \
+    source "${HOME}/.profile" && \
+    set -o pipefail && \
     _rails=rails && \
     _nvm=https://raw.githubusercontent.com/nvm-sh/nvm/3fea5493a4/install.sh && \
-    gem install --user-install --bindir "${HOME}/.local/bin" "${_rails}" && \
+    echo "install: --user-install --bindir ${HOME}/.local/bin" > ~/.gemrc && \
+    gem install "${_rails}" && \
     curl -o- "${_nvm}" | bash && \
     source "${HOME}/.nvm/nvm.sh" && \
     nvm install --lts && \
